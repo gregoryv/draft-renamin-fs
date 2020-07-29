@@ -9,8 +9,8 @@ import (
 	"runtime"
 )
 
-// A GlobFS is a file system with a Glob method.
-type GlobFS interface {
+// A GlobSys is a file system with a Glob method.
+type GlobSys interface {
 	System
 
 	// Glob returns the names of all files matching pattern,
@@ -32,7 +32,7 @@ type GlobFS interface {
 // Otherwise, Glob uses ReadDir to traverse the directory tree
 // and look for matches for the pattern.
 func Glob(fs System, pattern string) (matches []string, err error) {
-	if fs, ok := fs.(GlobFS); ok {
+	if fs, ok := fs.(GlobSys); ok {
 		return fs.Glob(pattern)
 	}
 
