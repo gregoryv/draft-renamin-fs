@@ -6,9 +6,9 @@ package fs
 
 import "io"
 
-// ReadFileFS is the interface implemented by a file system
+// ReadFileSys is the interface implemented by a file system
 // that provides an optimized implementation of ReadFile.
-type ReadFileFS interface {
+type ReadFileSys interface {
 	System
 
 	// ReadFile reads the named file and returns its contents.
@@ -27,7 +27,7 @@ type ReadFileFS interface {
 // Otherwise ReadFile calls fs.Open and uses Read and Close
 // on the returned file.
 func ReadFile(fs System, name string) ([]byte, error) {
-	if fs, ok := fs.(ReadFileFS); ok {
+	if fs, ok := fs.(ReadFileSys); ok {
 		return fs.ReadFile(name)
 	}
 
