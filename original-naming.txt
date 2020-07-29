@@ -1,0 +1,22 @@
+package fs // import "."
+
+var ErrInvalid = errInvalid() ...
+var SkipDir = errors.New("skip this directory")
+func Glob(fsys FS, pattern string) (matches []string, err error)
+func ReadFile(fsys FS, name string) ([]byte, error)
+func ValidPath(name string) bool
+func Walk(fsys FS, root string, walkFn WalkFunc) error
+type FS interface{ ... }
+type File interface{ ... }
+type FileInfo interface{ ... }
+    func ReadDir(fsys FS, name string) ([]FileInfo, error)
+    func Stat(fsys FS, name string) (FileInfo, error)
+type FileMode uint32
+    const ModeDir FileMode = 1 << (32 - 1 - iota) ...
+type GlobFS interface{ ... }
+type PathError struct{ ... }
+type ReadDirFS interface{ ... }
+type ReadDirFile interface{ ... }
+type ReadFileFS interface{ ... }
+type StatFS interface{ ... }
+type WalkFunc func(path string, info FileInfo, err error) error
