@@ -37,9 +37,7 @@ type FileInfo interface{ ... }
     func ReadDir(fsys FS, name string) ([]FileInfo, error)
     func Stat(fsys FS, name string) (FileInfo, error)
 type GlobFS interface{ ... }
-type PathError struct{ ... }
 type ReadDirFS interface{ ... }
-type ReadDirFile interface{ ... }
 type ReadFileFS interface{ ... }
 type StatFS interface{ ... }
 ```
@@ -54,13 +52,10 @@ type FileInfo interface{ ... }
     func ReadDir(sys System, name string) ([]FileInfo, error)
     func Stat(sys System, name string) (FileInfo, error)
 type GlobSys interface{ ... }
-type PathError struct{ ... }
-type ReadDirFile interface{ ... }
 type ReadDirSys interface{ ... }
 type ReadFileSys interface{ ... }
 type StatSys interface{ ... }
 type System interface{ ... }
-type WalkFunc func(path string, info FileInfo, err error) error
 ```
 
 Using the renamed variation
