@@ -5,7 +5,7 @@
 package fs
 
 import (
-	"internal/oserror"
+	"fs/oserror"
 	"time"
 )
 
