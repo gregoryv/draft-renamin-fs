@@ -9,9 +9,9 @@ import (
 	"sort"
 )
 
-// ReadDirFS is the interface implemented by a file system
+// ReadDirSys is the interface implemented by a file system
 // that provides an optimized implementation of ReadDir.
-type ReadDirFS interface {
+type ReadDirSys interface {
 	System
 
 	// ReadDir reads the named directory
@@ -26,7 +26,7 @@ type ReadDirFS interface {
 // Otherwise ReadDir calls fs.Open and uses ReadDir and Close
 // on the returned file.
 func ReadDir(fs System, name string) ([]FileInfo, error) {
-	if fs, ok := fs.(ReadDirFS); ok {
+	if fs, ok := fs.(ReadDirSys); ok {
 		return fs.ReadDir(name)
 	}
 
