@@ -11,7 +11,7 @@ import (
 )
 
 var globTests = []struct {
-	fs              System
+	sys             System
 	pattern, result string
 }{
 	{os.DirFS("."), "glob.go", "glob.go"},
@@ -22,7 +22,7 @@ var globTests = []struct {
 
 func TestGlob(t *testing.T) {
 	for _, tt := range globTests {
-		matches, err := Glob(tt.fs, tt.pattern)
+		matches, err := Glob(tt.sys, tt.pattern)
 		if err != nil {
 			t.Errorf("Glob error for %q: %s", tt.pattern, err)
 			continue

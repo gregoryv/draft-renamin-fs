@@ -8,12 +8,12 @@ In short
 
 - rename type FS to System
 - rename suffix FS to Sys
-- rename argument fsys to fs
+- rename argument fsys to sys
 
 Readability is improved in how we reason/talk about things, eg.
 
 - Before: "Glob uses the fsys argument of type FS to ..."
-- After: "Glob uses the fs argument of type System to ..."
+- After: "Glob uses the sys argument of type System to ..."
 
 - Before: "ReadFileFS interface extends the FS interface with ..."
 - After: "ReadFileSys interface extends the System interface with ..."
@@ -33,10 +33,13 @@ func Glob(fsys FS, pattern string) (matches []string, err error)
 func ReadFile(fsys FS, name string) ([]byte, error)
 func Walk(fsys FS, root string, walkFn WalkFunc) error
 type FS interface{ ... }
+type FileInfo interface{ ... }
     func ReadDir(fsys FS, name string) ([]FileInfo, error)
     func Stat(fsys FS, name string) (FileInfo, error)
 type GlobFS interface{ ... }
+type PathError struct{ ... }
 type ReadDirFS interface{ ... }
+type ReadDirFile interface{ ... }
 type ReadFileFS interface{ ... }
 type StatFS interface{ ... }
 ```
@@ -44,16 +47,20 @@ type StatFS interface{ ... }
 ## After
 
 ```go
-func Glob(fs System, pattern string) (matches []string, err error)
-func ReadFile(fs System, name string) ([]byte, error)
-func Walk(fs System, root string, walkFn WalkFunc) error
-    func ReadDir(fs System, name string) ([]FileInfo, error)
-    func Stat(fs System, name string) (FileInfo, error)
+func Glob(sys System, pattern string) (matches []string, err error)
+func ReadFile(sys System, name string) ([]byte, error)
+func Walk(sys System, root string, walkFn WalkFunc) error
+type FileInfo interface{ ... }
+    func ReadDir(sys System, name string) ([]FileInfo, error)
+    func Stat(sys System, name string) (FileInfo, error)
 type GlobSys interface{ ... }
+type PathError struct{ ... }
+type ReadDirFile interface{ ... }
 type ReadDirSys interface{ ... }
 type ReadFileSys interface{ ... }
 type StatSys interface{ ... }
 type System interface{ ... }
+type WalkFunc func(path string, info FileInfo, err error) error
 ```
 
 Using the renamed variation

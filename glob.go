@@ -31,13 +31,13 @@ type GlobSys interface {
 // If System implements GlobFS, Glob calls fs.Glob.
 // Otherwise, Glob uses ReadDir to traverse the directory tree
 // and look for matches for the pattern.
-func Glob(fs System, pattern string) (matches []string, err error) {
-	if fs, ok := fs.(GlobSys); ok {
-		return fs.Glob(pattern)
+func Glob(sys System, pattern string) (matches []string, err error) {
+	if sys, ok := sys.(GlobSys); ok {
+		return sys.Glob(pattern)
 	}
 
 	if !hasMeta(pattern) {
-		if _, err = Stat(fs, pattern); err != nil {
+		if _, err = Stat(sys, pattern); err != nil {
 			return nil, nil
 		}
 		return []string{pattern}, nil
@@ -47,7 +47,7 @@ func Glob(fs System, pattern string) (matches []string, err error) {
 	dir = cleanGlobPath(dir)
 
 	if !hasMeta(dir) {
-		return glob(fs, dir, file, nil)
+		return glob(sys, dir, file, nil)
 	}
 
 	// Prevent infinite recursion. See issue 15879.
@@ -56,12 +56,12 @@ func Glob(fs System, pattern string) (matches []string, err error) {
 	}
 
 	var m []string
-	m, err = Glob(fs, dir)
+	m, err = Glob(sys, dir)
 	if err != nil {
 		return
 	}
 	for _, d := range m {
-		matches, err = glob(fs, d, file, matches)
+		matches, err = glob(sys, d, file, matches)
 		if err != nil {
 			return
 		}
@@ -83,9 +83,9 @@ func cleanGlobPath(path string) string {
 // and appends them to matches. If the directory cannot be
 // opened, it returns the existing matches. New matches are
 // added in lexicographical order.
-func glob(fs System, dir, pattern string, matches []string) (m []string, e error) {
+func glob(sys System, dir, pattern string, matches []string) (m []string, e error) {
 	m = matches
-	infos, err := ReadDir(fs, dir)
+	infos, err := ReadDir(sys, dir)
 	if err != nil {
 		return // ignore I/O error
 	}

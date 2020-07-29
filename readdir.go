@@ -25,12 +25,12 @@ type ReadDirSys interface {
 // If System implements ReadDirFS, ReadDir calls fs.ReadDir.
 // Otherwise ReadDir calls fs.Open and uses ReadDir and Close
 // on the returned file.
-func ReadDir(fs System, name string) ([]FileInfo, error) {
-	if fs, ok := fs.(ReadDirSys); ok {
-		return fs.ReadDir(name)
+func ReadDir(sys System, name string) ([]FileInfo, error) {
+	if sys, ok := sys.(ReadDirSys); ok {
+		return sys.ReadDir(name)
 	}
 
-	file, err := fs.Open(name)
+	file, err := sys.Open(name)
 	if err != nil {
 		return nil, err
 	}
