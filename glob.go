@@ -11,7 +11,7 @@ import (
 
 // A GlobFS is a file system with a Glob method.
 type GlobFS interface {
-	FS
+	System
 
 	// Glob returns the names of all files matching pattern,
 	// providing an implementation of the top-level
@@ -28,10 +28,10 @@ type GlobFS interface {
 // The only possible returned error is path.ErrBadPattern, when pattern
 // is malformed.
 //
-// If fs implements GlobFS, Glob calls fs.Glob.
+// If System implements GlobFS, Glob calls fs.Glob.
 // Otherwise, Glob uses ReadDir to traverse the directory tree
 // and look for matches for the pattern.
-func Glob(fsys FS, pattern string) (matches []string, err error) {
+func Glob(fsys System, pattern string) (matches []string, err error) {
 	if fsys, ok := fsys.(GlobFS); ok {
 		return fsys.Glob(pattern)
 	}
@@ -83,7 +83,7 @@ func cleanGlobPath(path string) string {
 // and appends them to matches. If the directory cannot be
 // opened, it returns the existing matches. New matches are
 // added in lexicographical order.
-func glob(fs FS, dir, pattern string, matches []string) (m []string, e error) {
+func glob(fs System, dir, pattern string, matches []string) (m []string, e error) {
 	m = matches
 	infos, err := ReadDir(fs, dir)
 	if err != nil {

@@ -11,7 +11,7 @@ import (
 )
 
 var globTests = []struct {
-	fs              FS
+	fs              System
 	pattern, result string
 }{
 	{os.DirFS("."), "glob.go", "glob.go"},

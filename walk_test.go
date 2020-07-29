@@ -53,7 +53,7 @@ func walkTree(n *Node, path string, f func(path string, n *Node)) {
 	}
 }
 
-func makeTree(t *testing.T) FS {
+func makeTree(t *testing.T) System {
 	fsys := fstest.MapFS{}
 	walkTree(tree, tree.name, func(path string, n *Node) {
 		if n.entries == nil {

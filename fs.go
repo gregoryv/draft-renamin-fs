@@ -9,13 +9,13 @@ import (
 	"time"
 )
 
-// An FS provides access to a hierarchical file system.
+// An System provides access to a hierarchical file system.
 //
-// The FS interface is the minimum implementation required of the file system.
+// The System interface is the minimum implementation required of the file system.
 // A file system may implement additional interfaces,
 // such as fsutil.ReadFileFS, to provide additional or optimized functionality.
 // See io/fsutil for details.
-type FS interface {
+type System interface {
 	// Open opens the named file.
 	//
 	// When Open returns an error, it should be of type *PathError

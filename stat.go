@@ -6,7 +6,7 @@ package fs
 
 // A StatFS is a file system with a Stat method.
 type StatFS interface {
-	FS
+	System
 
 	// Stat returns a FileInfo describing the file.
 	// If there is an error, it should be of type *PathError.
@@ -15,9 +15,9 @@ type StatFS interface {
 
 // Stat returns a FileInfo describing the named file from the file system.
 //
-// If fs implements StatFS, Stat calls fs.Stat.
+// If System implements StatFS, Stat calls fs.Stat.
 // Otherwise, Stat opens the file to stat it.
-func Stat(fsys FS, name string) (FileInfo, error) {
+func Stat(fsys System, name string) (FileInfo, error) {
 	if fsys, ok := fsys.(StatFS); ok {
 		return fsys.Stat(name)
 	}
