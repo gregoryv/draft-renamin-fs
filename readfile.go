@@ -26,12 +26,12 @@ type ReadFileFS interface {
 // If System implements ReadFileFS, ReadFile calls fs.ReadFile.
 // Otherwise ReadFile calls fs.Open and uses Read and Close
 // on the returned file.
-func ReadFile(fsys System, name string) ([]byte, error) {
-	if fsys, ok := fsys.(ReadFileFS); ok {
-		return fsys.ReadFile(name)
+func ReadFile(fs System, name string) ([]byte, error) {
+	if fs, ok := fs.(ReadFileFS); ok {
+		return fs.ReadFile(name)
 	}
 
-	file, err := fsys.Open(name)
+	file, err := fs.Open(name)
 	if err != nil {
 		return nil, err
 	}

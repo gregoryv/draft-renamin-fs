@@ -17,12 +17,12 @@ type StatFS interface {
 //
 // If System implements StatFS, Stat calls fs.Stat.
 // Otherwise, Stat opens the file to stat it.
-func Stat(fsys System, name string) (FileInfo, error) {
-	if fsys, ok := fsys.(StatFS); ok {
-		return fsys.Stat(name)
+func Stat(fs System, name string) (FileInfo, error) {
+	if fs, ok := fs.(StatFS); ok {
+		return fs.Stat(name)
 	}
 
-	file, err := fsys.Open(name)
+	file, err := fs.Open(name)
 	if err != nil {
 		return nil, err
 	}

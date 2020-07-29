@@ -31,13 +31,13 @@ type GlobFS interface {
 // If System implements GlobFS, Glob calls fs.Glob.
 // Otherwise, Glob uses ReadDir to traverse the directory tree
 // and look for matches for the pattern.
-func Glob(fsys System, pattern string) (matches []string, err error) {
-	if fsys, ok := fsys.(GlobFS); ok {
-		return fsys.Glob(pattern)
+func Glob(fs System, pattern string) (matches []string, err error) {
+	if fs, ok := fs.(GlobFS); ok {
+		return fs.Glob(pattern)
 	}
 
 	if !hasMeta(pattern) {
-		if _, err = Stat(fsys, pattern); err != nil {
+		if _, err = Stat(fs, pattern); err != nil {
 			return nil, nil
 		}
 		return []string{pattern}, nil
@@ -47,7 +47,7 @@ func Glob(fsys System, pattern string) (matches []string, err error) {
 	dir = cleanGlobPath(dir)
 
 	if !hasMeta(dir) {
-		return glob(fsys, dir, file, nil)
+		return glob(fs, dir, file, nil)
 	}
 
 	// Prevent infinite recursion. See issue 15879.
@@ -56,12 +56,12 @@ func Glob(fsys System, pattern string) (matches []string, err error) {
 	}
 
 	var m []string
-	m, err = Glob(fsys, dir)
+	m, err = Glob(fs, dir)
 	if err != nil {
 		return
 	}
 	for _, d := range m {
-		matches, err = glob(fsys, d, file, matches)
+		matches, err = glob(fs, d, file, matches)
 		if err != nil {
 			return
 		}

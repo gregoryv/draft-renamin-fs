@@ -32,12 +32,12 @@ var SkipDir = errors.New("skip this directory")
 type WalkFunc func(path string, info FileInfo, err error) error
 
 // walk recursively descends path, calling walkFn.
-func walk(fsys System, path string, info FileInfo, walkFn WalkFunc) error {
+func walk(fs System, path string, info FileInfo, walkFn WalkFunc) error {
 	if !info.IsDir() {
 		return walkFn(path, info, nil)
 	}
 
-	infos, err := ReadDir(fsys, path)
+	infos, err := ReadDir(fs, path)
 	err1 := walkFn(path, info, err)
 	// If err != nil, walk can't walk into this directory.
 	// err1 != nil means walkFn want walk to skip this directory or stop walking.
@@ -52,7 +52,7 @@ func walk(fsys System, path string, info FileInfo, walkFn WalkFunc) error {
 
 	for _, info := range infos {
 		filename := pathpkg.Join(path, info.Name())
-		err = walk(fsys, filename, info, walkFn)
+		err = walk(fs, filename, info, walkFn)
 		if err != nil {
 			if !info.IsDir() || err != SkipDir {
 				return err
@@ -67,12 +67,12 @@ func walk(fsys System, path string, info FileInfo, walkFn WalkFunc) error {
 // and directories are filtered by walkFn. The files are walked in lexical
 // order, which makes the output deterministic but means that for very
 // large directories Walk can be inefficient.
-func Walk(fsys System, root string, walkFn WalkFunc) error {
-	info, err := Stat(fsys, root)
+func Walk(fs System, root string, walkFn WalkFunc) error {
+	info, err := Stat(fs, root)
 	if err != nil {
 		err = walkFn(root, nil, err)
 	} else {
-		err = walk(fsys, root, info, walkFn)
+		err = walk(fs, root, info, walkFn)
 	}
 	if err == SkipDir {
 		return nil

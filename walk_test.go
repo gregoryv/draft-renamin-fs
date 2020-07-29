@@ -54,15 +54,15 @@ func walkTree(n *Node, path string, f func(path string, n *Node)) {
 }
 
 func makeTree(t *testing.T) System {
-	fsys := fstest.MapFS{}
+	fs := fstest.MapFS{}
 	walkTree(tree, tree.name, func(path string, n *Node) {
 		if n.entries == nil {
-			fsys[path] = &fstest.MapFile{}
+			fs[path] = &fstest.MapFile{}
 		} else {
-			fsys[path] = &fstest.MapFile{Mode: ModeDir}
+			fs[path] = &fstest.MapFile{Mode: ModeDir}
 		}
 	})
-	return fsys
+	return fs
 }
 
 func markTree(n *Node) { walkTree(n, "", func(path string, n *Node) { n.mark++ }) }
@@ -137,14 +137,14 @@ func TestWalk(t *testing.T) {
 	}
 	defer os.Chdir(origDir)
 
-	fsys := makeTree(t)
+	fs := makeTree(t)
 	errors := make([]error, 0, 10)
 	clear := true
 	markFn := func(path string, info FileInfo, err error) error {
 		return mark(info, err, &errors, clear)
 	}
 	// Expect no errors.
-	err = Walk(fsys, ".", markFn)
+	err = Walk(fs, ".", markFn)
 	if err != nil {
 		t.Fatalf("no error expected, found: %s", err)
 	}
