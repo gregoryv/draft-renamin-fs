@@ -4,8 +4,8 @@
 
 package fs
 
-// A StatFS is a file system with a Stat method.
-type StatFS interface {
+// A StatSys is a file system with a Stat method.
+type StatSys interface {
 	System
 
 	// Stat returns a FileInfo describing the file.
@@ -18,7 +18,7 @@ type StatFS interface {
 // If System implements StatFS, Stat calls fs.Stat.
 // Otherwise, Stat opens the file to stat it.
 func Stat(fs System, name string) (FileInfo, error) {
-	if fs, ok := fs.(StatFS); ok {
+	if fs, ok := fs.(StatSys); ok {
 		return fs.Stat(name)
 	}
 
